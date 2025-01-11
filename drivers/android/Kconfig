@@ -58,6 +58,12 @@ config BINDER_OPT
 	bool "critical task opt of binder"
 	help
 	  Mark important binder calls from ui thread.
+	  
+config REKERNEL
+	bool "Re:Kernel Configuration"
+	default n
+	help
+	  Make tombstone users get a better experience.
 
 endif # if ANDROID
 
