@@ -146,3 +146,12 @@ scripts/build_kernel
 scripts/update_defconfig
 
 out/
+
+# patches
+*.patch
+*.orig
+*.rej
+
+# backups
+*.bak
+
