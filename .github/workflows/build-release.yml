@@ -80,6 +80,7 @@ jobs:
           gzip -k Image Image.gz
           cat Image.gz *.dtb > Image.gz-dtb
           cp Image.gz-dtb $GITHUB_WORKSPACE/workdir/source/android/Packer
+          cp $GITHUB_WORKSPACE/workdir/source/out/arch/arm64/boot/dtbo.img $GITHUB_WORKSPACE/workdir/source/android/Packer/
           sed -i '/description/ s/$/ Just installed K-Nel Alioth version: ${{ steps.get-tag.outputs.TAG_NAME }} (NON-KSU)/'  $GITHUB_WORKSPACE/workdir/source/android/Packer/module.prop
           
       - name: Upload Kernel Package
@@ -172,6 +173,7 @@ jobs:
       - name: Pack Kernel
         run: |
           cp $GITHUB_WORKSPACE/workdir/SukiSU-Patch/Image.gz-dtb $GITHUB_WORKSPACE/workdir/source/android/Packer/
+          cp $GITHUB_WORKSPACE/workdir/source/out/arch/arm64/boot/dtbo.img $GITHUB_WORKSPACE/workdir/source/android/Packer/
           sed -i '/description/ s/$/ Just installed K-Nel Alioth version: ${{ steps.get-tag.outputs.TAG_NAME }} (With SukiSU Ultra, KPM, SUSFS)/'  $GITHUB_WORKSPACE/workdir/source/android/Packer/module.prop
           
       - name: Upload Kernel Package
