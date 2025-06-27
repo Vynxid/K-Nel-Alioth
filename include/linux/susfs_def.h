@@ -24,9 +24,6 @@
 #define CMD_SUSFS_SHOW_VERSION 0x555e1
 #define CMD_SUSFS_SHOW_ENABLED_FEATURES 0x555e2
 #define CMD_SUSFS_SHOW_VARIANT 0x555e3
-#define CMD_SUSFS_SHOW_SUS_SU_WORKING_MODE 0x555e4
-#define CMD_SUSFS_IS_SUS_SU_READY 0x555f0
-#define CMD_SUSFS_SUS_SU 0x60000
 
 #define SUSFS_MAX_LEN_PATHNAME 256 // 256 should address many paths already unless you are doing some strange experimental stuff, then set your own desired length
 #define SUSFS_FAKE_CMDLINE_OR_BOOTCONFIG_SIZE 4096
@@ -34,13 +31,9 @@
 #define TRY_UMOUNT_DEFAULT 0 /* used by susfs_try_umount() */
 #define TRY_UMOUNT_DETACH 1 /* used by susfs_try_umount() */
 
-#define SUS_SU_DISABLED 0
-#define SUS_SU_WITH_OVERLAY 1 /* deprecated */
-#define SUS_SU_WITH_HOOKS 2
-
-#define DEFAULT_SUS_MNT_ID 500000000 /* used by mount->mnt_id */
-#define DEFAULT_SUS_MNT_ID_FOR_KSU_PROC_UNSHARE 2000000000 /* used by vfsmount->susfs_mnt_id_backup */
-#define DEFAULT_SUS_MNT_GROUP_ID 5000000 /* used by mount->mnt_group_id */
+#define DEFAULT_SUS_MNT_ID 100000 /* used by mount->mnt_id */
+#define DEFAULT_SUS_MNT_ID_FOR_KSU_PROC_UNSHARE 1000000 /* used by vfsmount->susfs_mnt_id_backup */
+#define DEFAULT_SUS_MNT_GROUP_ID 1000 /* used by mount->mnt_group_id */
 
 /*
  * inode->i_state => storing flag 'INODE_STATE_'
