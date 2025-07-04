@@ -50,7 +50,7 @@ jobs:
       - name: Processing submodules
         run: |
           cd $GITHUB_WORKSPACE/workdir/source
-          git submodule update --init KernelSU
+          git submodule update --init --remote --rebase --recursive KernelSU
           sed -i -e '$a\'$'\n''CONFIG_KSU=n' arch/arm64/configs/alioth_k-nel_defconfig
           
       - name: Build Kernel
@@ -135,7 +135,7 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/workdir/source
           git submodule update --init --remote --rebase --recursive KernelSU
-          sed -i -e '$a\'$'\n''CONFIG_KSU=y\nCONFIG_KSU_MANUAL_HOOK=y\nCONFIG_KPM=y\nCONFIG_KSU_SUSFS=y\nCONFIG_KSU_SUSFS_HAS_MAGIC_MOUNT=y\nCONFIG_KSU_SUSFS_SUS_PATH=y\nCONFIG_KSU_SUSFS_SUS_MOUNT=y\nCONFIG_KSU_SUSFS_AUTO_ADD_SUS_KSU_DEFAULT_MOUNT=y\nCONFIG_KSU_SUSFS_AUTO_ADD_SUS_BIND_MOUNT=y\nCONFIG_KSU_SUSFS_SUS_KSTAT=y\nCONFIG_KSU_SUSFS_TRY_UMOUNT=y\nCONFIG_KSU_SUSFS_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT=y\nCONFIG_KSU_SUSFS_SPOOF_UNAME=y\nCONFIG_KSU_SUSFS_ENABLE_LOG=y\nCONFIG_KSU_SUSFS_HIDE_KSU_SUSFS_SYMBOLS=y\nCONFIG_KSU_SUSFS_OPEN_REDIRECT=y\nCONFIG_KSU_SUSFS_SUS_SU=n' arch/arm64/configs/alioth_k-nel_defconfig
+          sed -i -e '$a\'$'\n''CONFIG_KSU=y\nCONFIG_KSU_MANUAL_HOOK=y\nCONFIG_KSU_SUSFS=y\nCONFIG_KSU_SUSFS_HAS_MAGIC_MOUNT=y\nCONFIG_KSU_SUSFS_SUS_PATH=y\nCONFIG_KSU_SUSFS_SUS_MOUNT=y\nCONFIG_KSU_SUSFS_AUTO_ADD_SUS_KSU_DEFAULT_MOUNT=y\nCONFIG_KSU_SUSFS_AUTO_ADD_SUS_BIND_MOUNT=y\nCONFIG_KSU_SUSFS_SUS_KSTAT=y\nCONFIG_KSU_SUSFS_TRY_UMOUNT=y\nCONFIG_KSU_SUSFS_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT=y\nCONFIG_KSU_SUSFS_SPOOF_UNAME=y\nCONFIG_KSU_SUSFS_ENABLE_LOG=y\nCONFIG_KSU_SUSFS_HIDE_KSU_SUSFS_SYMBOLS=y\nCONFIG_KSU_SUSFS_OPEN_REDIRECT=y\nCONFIG_KSU_SUSFS_SUS_SU=n' arch/arm64/configs/alioth_k-nel_defconfig
           
       - name: Build Kernel
         run: |
@@ -157,24 +157,15 @@ jobs:
           make O=out alioth_k-nel_defconfig
           make -j$(nproc --all) O=out CC="ccache clang" HOSTCC="ccache gcc" HOSTCXX="ccache g++" 2>&1
 
-      - name: Patch SukiSU Ultra KPM
-        run: |
-          mkdir $GITHUB_WORKSPACE/workdir/SukiSU-Patch
-          cd $GITHUB_WORKSPACE/workdir/SukiSU-Patch
-          wget https://github.com/SukiSU-Ultra/SukiSU_KernelPatch_patch/releases/latest/download/patch_linux
-          cp $GITHUB_WORKSPACE/workdir/source/out/arch/arm64/boot/Image .
-          cp $GITHUB_WORKSPACE/workdir/source/out/arch/arm64/boot/dts/vendor/qcom/*.dtb .
-          chmod +x patch_linux
-          ./patch_linux
-          mv -f oImage Image
-          gzip -k Image Image.gz
-          cat Image.gz *.dtb > Image.gz-dtb
-
       - name: Pack Kernel
         run: |
-          cp $GITHUB_WORKSPACE/workdir/SukiSU-Patch/Image.gz-dtb $GITHUB_WORKSPACE/workdir/source/android/Packer/
+          cp $GITHUB_WORKSPACE/workdir/source/out/arch/arm64/boot/Image .
+          cp $GITHUB_WORKSPACE/workdir/source/out/arch/arm64/boot/dts/vendor/qcom/*.dtb .
+          gzip -k Image Image.gz
+          cat Image.gz *.dtb > Image.gz-dtb
+          cp Image.gz-dtb $GITHUB_WORKSPACE/workdir/source/android/Packer/
           cp $GITHUB_WORKSPACE/workdir/source/out/arch/arm64/boot/dtbo.img $GITHUB_WORKSPACE/workdir/source/android/Packer/
-          sed -i '/description/ s/$/ Just installed K-Nel Alioth version: ${{ steps.get-tag.outputs.TAG_NAME }} (With SukiSU Ultra, KPM, SUSFS)/'  $GITHUB_WORKSPACE/workdir/source/android/Packer/module.prop
+          sed -i '/description/ s/$/ Just installed K-Nel Alioth version: ${{ steps.get-tag.outputs.TAG_NAME }}/'  $GITHUB_WORKSPACE/workdir/source/android/Packer/module.prop
           
       - name: Upload Kernel Package
         uses: actions/upload-artifact@v4
