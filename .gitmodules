@@ -6,3 +6,6 @@
 	path = android/Installer
 	url = https://github.com/KJ-Network/K-Nel-Installer.git
 	branch = alioth
+[submodule "Baseband-guard"]
+	path = Baseband-guard
+	url = https://github.com/vc-teahouse/Baseband-guard.git
