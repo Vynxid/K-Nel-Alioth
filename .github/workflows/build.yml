@@ -1,5 +1,6 @@
 name: Build K-Nel Alioth
 on:
+  workflow_dispatch:
   push:
     tags:
       - "C-*"
