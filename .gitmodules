@@ -1,7 +1,3 @@
-[submodule "KernelSU"]
-	path = KernelSU
-	url = https://github.com/rsuntk/KernelSU.git
-	branch = susfs-main
 [submodule "android/Installer"]
 	path = android/Installer
 	url = https://github.com/KJ-Network/K-Nel-Installer.git
