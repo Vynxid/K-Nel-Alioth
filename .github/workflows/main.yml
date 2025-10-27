@@ -23,11 +23,11 @@ jobs:
 
       - name: Remove KernelSU submodule folder and configs
         run: |
-          git rm -f KernelSU-Next || true
-          rm -rf KernelSU-Next
-          git config -f .git/config --remove-section submodule.KernelSU-Next || true
-          git config --remove-section submodule.KernelSU-Next || true
-          rm -rf .git/modules/KernelSU-Next || true
+          git rm -f KernelSU || true
+          rm -rf KernelSU
+          git config -f .git/config --remove-section submodule.KernelSU || true
+          git config --remove-section submodule.KernelSU || true
+          rm -rf .git/modules/KernelSU || true
 
       - name: Commit and push changes
         run: |
