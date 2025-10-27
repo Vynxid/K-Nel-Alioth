@@ -1,0 +1,42 @@
+name: Remove KernelSU Submodule
+
+on:
+  workflow_dispatch:
+
+jobs:
+  remove-kernelsu:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Remove KernelSU from .gitmodules
+        run: |
+          if [ -f .gitmodules ]; then
+            echo "Menghapus entri KernelSU dari .gitmodules..."
+            sed -i '/KernelSU-Next/,/^$/d' .gitmodules || true
+          fi
+
+      - name: Remove KernelSU submodule folder and configs
+        run: |
+          git rm -f KernelSU-Next || true
+          rm -rf KernelSU-Next
+          git config -f .git/config --remove-section submodule.KernelSU-Next || true
+          git config --remove-section submodule.KernelSU-Next || true
+          rm -rf .git/modules/KernelSU-Next || true
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Tidak ada perubahan untuk dikomit."
+          else
+            git commit -m "Remove KernelSU submodule"
+            git push origin HEAD
+          fi
